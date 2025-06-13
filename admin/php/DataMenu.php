@@ -27,17 +27,18 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #f8fafc 0%, #d7b899 100%);
+            background: linear-gradient(135deg, #c7a17a 0%, #6f4e37 100%);
             font-family: 'Inter', sans-serif;
         }
 
         .nav-container {
-            background: #fff;
+            background: #fff8f0;
             border-radius: 0 0 20px 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(111, 78, 55, 0.08);
             padding: 1rem 2rem;
             margin-bottom: 2rem;
         }
@@ -45,64 +46,111 @@ if (isset($_POST['submit'])) {
         .nav-title {
             font-weight: 700;
             font-size: 1.5rem;
-            color: #8d6748;
-            /* Coklat tua */
+            color: #6f4e37;
         }
 
         .nav-link.active,
         .nav-link:hover {
-            color: #a9744f !important;
-            /* Coklat muda */
+            color: #a67c52 !important;
             font-weight: 600;
         }
 
         .card {
             transition: transform 0.2s, box-shadow 0.2s;
             border-radius: 1rem;
+            background: #ede0d4;
+            border: 1px solid #a67c52;
         }
 
         .card:hover {
             transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 8px 24px rgba(141, 103, 72, 0.12);
-            /* Coklat tua transparan */
+            box-shadow: 0 8px 24px rgba(111, 78, 55, 0.12);
         }
 
         .card-title {
             font-size: 1.1rem;
-            color: #a9744f;
-            /* Coklat muda */
+            color: #a67c52;
         }
 
         .display-5 {
             font-size: 2.5rem;
-            color: #8d6748;
+            color: #6f4e37;
         }
 
-        .border-success {
-            border-color: #b68973 !important;
-            /* Coklat krem */
-        }
-
-        .border-primary {
-            border-color: #a9744f !important;
-            /* Coklat muda */
-        }
-
+        .border-success,
+        .border-primary,
         .border-warning {
-            border-color: #d7b899 !important;
-            /* Coklat krem terang */
+            border-color: #a67c52 !important;
         }
 
-        .text-success {
-            color: #b68973 !important;
-        }
-
-        .text-primary {
-            color: #a9744f !important;
-        }
-
+        .text-success,
+        .text-primary,
         .text-warning {
-            color: #d7b899 !important;
+            color: #a67c52 !important;
+        }
+
+        .add-btn {
+            background: #a67c52;
+            color: #fff8f0;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            transition: background 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #6f4e37;
+            color: #fff8f0;
+        }
+
+        .action-btn.edit-btn {
+            background: #c7a17a;
+            color: #fff8f0;
+            border: none;
+        }
+
+        .action-btn.edit-btn:hover {
+            background: #a67c52;
+            color: #fff8f0;
+        }
+
+        .action-btn.delete-btn {
+            background: #6f4e37;
+            color: #fff8f0;
+            border: none;
+        }
+
+        .action-btn.delete-btn:hover {
+            background: #a67c52;
+            color: #fff8f0;
+        }
+
+        .modal-content {
+            background: #ede0d4;
+        }
+
+        .btn-primary {
+            background: #a67c52;
+            border-color: #a67c52;
+        }
+
+        .btn-primary:hover {
+            background: #6f4e37;
+            border-color: #6f4e37;
+        }
+
+        .btn-secondary {
+            background: #c7a17a;
+            border-color: #c7a17a;
+            color: #fff8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #a67c52;
+            border-color: #a67c52;
+            color: #fff8f0;
         }
     </style>
 </head>
@@ -120,9 +168,7 @@ if (isset($_POST['submit'])) {
         </div>
     </nav>
 
-
     <div class="container">
-        <h1>Data dari Database</h1>
 
         <!-- Tombol untuk membuka modal tambah data -->
         <button type="button" class="add-btn btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahMenu">
@@ -155,7 +201,7 @@ if (isset($_POST['submit'])) {
                             <td><?= htmlspecialchars($menu['status_ketersediaan']); ?></td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a href="../php/ubah/UbahDataMenu.php?<?= urlencode($menu['id']); ?>" class="action-btn edit-btn btn btn-warning btn-sm" title="Ubah Data">
+                                    <a href="../php/ubah/UbahDataMenu.php?id=<?= urlencode($menu['id']); ?>" class="action-btn edit-btn btn btn-warning btn-sm" title="Ubah Data">
                                         <span class="icon">&#9998;</span> Ubah
                                     </a>
                                     <a href="../php/hapus/HapusDataMenu.php?id=<?= urlencode($menu['id']); ?>" class="action-btn delete-btn btn btn-danger btn-sm"
@@ -188,16 +234,16 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="nama" class="form-label">Nama Makanan</label>
+                        <label for="nama" class="form-label">Nama</label>
                         <input type="text" class="form-control" id="nama" name="nama" required>
                     </div>
                     <div class="mb-3">
                         <label for="kategori" class="form-label">Kategori</label>
                         <select class="form-select" id="kategori" name="kategori" required>
                             <option value="" selected disabled>Pilih Kategori</option>
-                            <option value="Makanan Berat">Makanan Berat</option>
-                            <option value="Makanan Ringan">Makanan Ringan</option>
-                            <option value="Minuman">Minuman</option>
+                            <option value="Makanan Berat">Ice</option>
+                            <option value="Makanan Ringan">Hot</option>
+                            <option value="Minuman">Dessert</option>
                         </select>
                     </div>
                     <div class="mb-3">

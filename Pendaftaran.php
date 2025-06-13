@@ -20,10 +20,93 @@ if (isset($_POST['akun'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap');
+
     body {
-        background: linear-gradient(135deg, #ece0d1 0%, #f5f5dc 100%);
+        background: linear-gradient(135deg, #7b4b28 0%, #a67c52 100%);
         min-height: 100vh;
         font-family: 'Montserrat', Arial, sans-serif;
+    }
+
+    .card {
+        background: #f9f6f2;
+        border-radius: 20px;
+        box-shadow: 0 10px 36px 0 rgba(44, 34, 18, 0.18);
+        border: none;
+        padding-top: 32px;
+        padding-bottom: 32px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card:before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, #e0c9a6 60%, transparent 100%);
+        opacity: 0.25;
+        z-index: 0;
+    }
+
+    .form-label {
+        color: #7b4b28;
+        font-weight: 600;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 1.5px solid #e0c9a6;
+        background: #fffdfa;
+    }
+
+    .form-control:focus {
+        border-color: #a67c52;
+        box-shadow: 0 0 0 0.2rem rgba(166, 124, 82, 0.15);
+    }
+
+    .btn-primary {
+        background-color: rgba(183, 134, 106, 0.54) !important;
+        /* gold */
+        border: none;
+        font-weight: bold;
+        letter-spacing: 1px;
+        transition: background 0.2s, transform 0.2s;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(123, 75, 40, 0.12);
+        color: #7b4b28 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #FFC300 !important;
+        /* darker gold */
+        transform: translateY(-2px) scale(1.03);
+        color: #7b4b28 !important;
+    }
+
+    h1.coffee-title {
+        font-family: 'Pacifico', cursive;
+        color: #7b4b28;
+        text-align: center;
+        margin-bottom: 28px;
+        font-size: 2.4rem;
+        letter-spacing: 2px;
+        text-shadow: 1px 2px 12px #e0c9a6;
+    }
+
+    .coffee-icon {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .coffee-icon svg {
+        width: 48px;
+        height: 48px;
+        fill: #a67c52;
+        filter: drop-shadow(0 2px 6px #e0c9a6);
     }
 </style>
 
