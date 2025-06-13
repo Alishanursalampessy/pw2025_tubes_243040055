@@ -1,12 +1,12 @@
-<?php include 'database2.php'?>
+<?php include 'database2.php' ?>
 
-<?php 
+<?php
 if (isset($_POST['akun'])) {
-   if(create_pendaftaran($_POST) > 0){
-         echo "<script>alert('data akun berhasil ditambahakan.');  ';</script>";
+    if (create_pendaftaran($_POST) > 0) {
+        echo "<script>alert('data akun berhasil ditambahakan.'); window.location.href ='index.php';</script>";
     } else {
-     echo "<script>alert('data akun gagal ditambahkan. ');  </script>";
-}
+        echo "<script>alert('data akun gagal ditambahkan. ');  </script>";
+    }
 }
 ?>
 
@@ -26,28 +26,29 @@ if (isset($_POST['akun'])) {
         font-family: 'Montserrat', Arial, sans-serif;
     }
 </style>
+
 <body class="container d-flex align-items-center justify-content-center" style="min-height:100vh;">
     <div class="card p-4" style="width: 500px;">
-    <form method="post">
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Nama</label>
-            <input type="text" class ="form-control" id="nama" name="nama" required>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Username</label>
-            <input type="text" class ="form-control" id="nama" name="username" required>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email"  name="email" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1"   class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary w-100" name="akun">Submit</button>
-    </form>
-</div>
+        <form method="post">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Nama</label>
+                <input type="text" class="form-control" id="nama" name="nama" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Username</label>
+                <input type="text" class="form-control" id="nama" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100" name="akun">Submit</button>
+        </form>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 

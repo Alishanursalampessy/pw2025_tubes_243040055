@@ -1,21 +1,59 @@
 <?php
 session_start();
+include 'database2.php';
 
-$error = "";
+$error = ""; // Inisialisasi variabel error
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $username = $_POST['username'] ?? "";
-    $password = $_POST['password'] ?? "";
+// Cek apakah tombol login ditekan
+if (isset($_POST['login'])) {
+    global $db;
 
-    if ($username === "alishnrsaa" && $password === "021006") {
-        $_SESSION['username'] = $username;
-        header("Location: ./admin/php/DataPesanan.php");
-        exit();
+    // Jika login sebagai admin
+    if ($_POST["username"] == "admin" && $_POST["password"] == "admin123") {
+        $_SESSION['login'] = true;
+        $_SESSION['username'] = "admin";
+        header("Location: ./admin/php/dashboard.php");
+        exit;
+    }
+
+    // Pastikan koneksi database tersedia
+    if (!$db) {
+        die("Koneksi database gagal: " . mysqli_connect_error());
+    }
+
+    // Ambil input username dan password dengan sanitasi
+    $username = mysqli_real_escape_string($db, $_POST['username']);
+    $password = mysqli_real_escape_string($db, $_POST['password']);
+
+    // Cek username di database
+    $result = mysqli_query($db, "SELECT * FROM data_pendaftaran WHERE username = '$username'");
+
+    if (!$result) {
+        die("Query gagal: " . mysqli_error($db));
+    }
+
+    // Jika username ditemukan
+    if (mysqli_num_rows($result) == 1) {
+        $data = mysqli_fetch_assoc($result);
+
+        if ($password === $data['password']) {
+            // Set session (tanpa menyimpan password)
+            $_SESSION['id'] = $data['id'];
+            $_SESSION['username'] = $data['username'];
+            $_SESSION['email'] = $data['email'];
+
+            // Redirect ke halaman utama
+            header("Location: ./public/php/home.php");
+            exit(); // Menghentikan eksekusi kode setelah redirect
+        } else {
+            $error = "Password salah!";
+        }
     } else {
-        $error = "Username atau Password salah!!";
+        $error = "Username tidak ditemukan!";
     }
 }
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -34,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     body {
         font-family: 'Roboto', Arial, sans-serif;
         min-height: 100vh;
-        background: linear-gradient(120deg, #f6e9d7 0%, #b1927c 100%);
+        background: linear-gradient(120deg, #7B4F27 0%, #D2B48C 100%);
         display: flex;
         flex-direction: column;
         animation: fadeInBg 1.2s;
@@ -50,39 +88,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    .navbar {
-        margin-bottom: 30px;
-        height: 70px;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(6px);
-    }
-
-    .navbar-brand {
-        font-family: 'Pacifico', cursive;
-        font-weight: bold;
-        font-size: 2rem;
-        color: #AB7743 !important;
-        letter-spacing: 2px;
-        text-shadow: 1px 2px 8px #e9d5c0;
-    }
-
     .login-container {
         min-height: 80vh;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-top: 5rem;
     }
 
     .glass-card {
-        background: rgba(255, 255, 255, 0.96);
-        border-radius: 32px;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-        backdrop-filter: blur(14px);
-        border: 1.5px solid rgba(171, 119, 67, 0.13);
-        padding: 3rem 2.5rem 2.2rem 2.5rem;
-        width: 390px;
+        background: rgba(255, 250, 240, 0.98);
+        border-radius: 36px;
+        box-shadow: 0 10px 40px 0 rgba(111, 78, 55, 0.18);
+        backdrop-filter: blur(18px);
+        border: 2px solid rgba(123, 79, 39, 0.13);
+        padding: 3.2rem 2.7rem 2.4rem 2.7rem;
+        width: 410px;
         position: relative;
         overflow: hidden;
         animation: fadeInUp 1s;
@@ -105,86 +126,126 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         position: absolute;
         top: -60px;
         left: -60px;
-        width: 130px;
-        height: 130px;
-        background: linear-gradient(135deg, #AB7743 60%, #fff0 100%);
+        width: 140px;
+        height: 140px;
+        background: radial-gradient(circle, #6F4E37 60%, #fff0 100%);
         border-radius: 50%;
-        opacity: 0.13;
+        opacity: 0.16;
         z-index: 0;
     }
 
     .glass-card .card-title {
         font-weight: bold;
-        color: #AB7743;
-        letter-spacing: 1px;
-        font-size: 1.6rem;
+        color: #7B4F27;
+        letter-spacing: 1.2px;
+        font-size: 1.7rem;
+        text-shadow: 0 2px 8px #d2b48c33;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .card-title .user-icon {
+        font-size: 1.5rem;
+        color: #A67B5B;
+        margin-right: 6px;
+        vertical-align: middle;
     }
 
     .form-label {
-        color: #AB7743;
-        font-weight: 500;
+        color: #7B4F27;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .form-label .input-icon {
+        font-size: 1.1rem;
+        color: #A67B5B;
+        margin-right: 4px;
+        vertical-align: middle;
     }
 
     .form-control {
-        border-radius: 12px;
+        border-radius: 14px;
+        border: 1.5px solid #D2B48C;
+        background: #f9f6f2;
         transition: box-shadow 0.2s, border-color 0.2s;
     }
 
     .form-control:focus {
-        border-color: #AB7743;
-        box-shadow: 0 0 0 0.2rem rgba(171, 119, 67, 0.15);
+        border-color: #7B4F27;
+        box-shadow: 0 0 0 0.2rem rgba(123, 79, 39, 0.13);
+        background: #fff;
     }
 
     .btn-primary {
-        background: linear-gradient(90deg, #AB7743 60%, #b1927c 100%);
+        background: linear-gradient(90deg, #7B4F27 60%, #A67B5B 100%);
         border: none;
         font-weight: bold;
-        letter-spacing: 1px;
+        letter-spacing: 1.2px;
         transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        box-shadow: 0 2px 8px rgba(171, 119, 67, 0.08);
-        border-radius: 14px;
+        box-shadow: 0 2px 12px rgba(123, 79, 39, 0.13);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary .login-icon {
+        font-size: 1.2rem;
+        margin-right: 4px;
+        vertical-align: middle;
     }
 
     .btn-primary:hover {
-        background: linear-gradient(90deg, #8c5d2c 60%, #b1927c 100%);
-        transform: scale(1.04);
-        box-shadow: 0 4px 16px #b1927c33;
+        background: linear-gradient(90deg, #5C3A1A 60%, #A67B5B 100%);
+        transform: scale(1.045);
+        box-shadow: 0 4px 18px #a67b5b33;
     }
 
     .login-illustration {
-        width: 110px;
+        width: 120px;
         display: block;
-        margin: 0 auto 1.3rem auto;
-        opacity: 0.97;
-        filter: drop-shadow(0 2px 8px #b1927c33);
-        transition: transform 0.2s;
+        margin: 0 auto 1.5rem auto;
+        opacity: 0.98;
+        filter: drop-shadow(0 2px 12px #a67b5b33);
+        transition: transform 0.22s;
+        border-radius: 50%;
+        background: #fff7f0;
+        padding: 8px;
+        box-shadow: 0 2px 12px #d2b48c22;
     }
 
     .glass-card:hover .login-illustration {
-        transform: scale(1.07) rotate(-2deg);
+        transform: scale(1.09) rotate(-2deg);
     }
 
     .register-link {
         display: block;
         text-align: center;
-        margin-top: 1.3rem;
-        color: #6F4E37;
-        font-size: 1rem;
+        margin-top: 1.5rem;
+        color: #5C3A1A;
+        font-size: 1.05rem;
         font-weight: 500;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.7px;
         transition: color 0.2s;
     }
 
     .register-link:hover {
         text-decoration: underline;
-        color: #AB7743;
+        color: #7B4F27;
     }
 
     .divider {
         text-align: center;
-        margin: 1.5rem 0 1rem 0;
-        color: #b1927c;
-        font-size: 0.95rem;
+        margin: 1.7rem 0 1.1rem 0;
+        color: #a67b5b;
+        font-size: 1rem;
         position: relative;
     }
 
@@ -193,15 +254,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         content: '';
         display: inline-block;
         width: 40%;
-        height: 1px;
-        background: #e9d5c0;
+        height: 1.5px;
+        background: #d2b48c;
         vertical-align: middle;
         margin: 0 8px;
     }
 
     .social-login {
         display: flex;
-        gap: 14px;
+        gap: 16px;
         justify-content: center;
     }
 
@@ -209,25 +270,25 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         border: none;
         background: #fff;
         border-radius: 50%;
-        width: 44px;
-        height: 44px;
+        width: 46px;
+        height: 46px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 8px #b1927c22;
+        box-shadow: 0 2px 10px #a67b5b22;
         transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
         cursor: pointer;
     }
 
     .social-btn:hover {
-        box-shadow: 0 4px 16px #b1927c44;
-        transform: scale(1.11);
+        box-shadow: 0 4px 18px #a67b5b44;
+        transform: scale(1.13);
         background: #f6e9d7;
     }
 
     .social-btn img {
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
     }
 
     .forgot-link {
@@ -235,15 +296,29 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         text-align: right;
         margin-top: -10px;
         margin-bottom: 10px;
-        font-size: 0.95rem;
-        color: #b1927c;
+        font-size: 0.97rem;
+        color: #a67b5b;
         text-decoration: none;
         transition: color 0.2s;
     }
 
     .forgot-link:hover {
-        color: #AB7743;
+        color: #7B4F27;
         text-decoration: underline;
+    }
+
+    /* Decorative coffee beans */
+    body::after {
+        content: '';
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 120px;
+        height: 120px;
+        background: url('./img/bean-decor.png') no-repeat center/contain;
+        opacity: 0.13;
+        pointer-events: none;
+        z-index: 1;
     }
 
     @media (max-width: 576px) {
@@ -257,20 +332,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 </style>
+<!-- Font Awesome CDN for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <body>
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light mb-4" data-aos="fade-down">
-        <div class="container">
-            <a class="navbar-brand" href="#">Dose Coffe</a>
-        </div>
-    </nav>
 
-    <div class="container login-container">
+    <div class="container login-container mb-5">
         <div class="glass-card shadow" data-aos="zoom-in" data-aos-delay="200">
             <img src="./img/logo.png" alt="Login Illustration" class="login-illustration" data-aos="fade-up" data-aos-delay="400">
             <h5 class="card-title text-center mb-4" data-aos="fade-up" data-aos-delay="500">Welcome Back!</h5>
-            <form action="login.php" method="post" autocomplete="off" data-aos="fade-up" data-aos-delay="600">
+            <form method="post" autocomplete="off" data-aos="fade-up" data-aos-delay="600">
                 <!-- ...form Anda tetap... -->
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
@@ -281,18 +352,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <a href="#" class="forgot-link">Lupa password?</a>
-                <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
+                <button type="submit" class="btn btn-primary w-100 mt-2" name="login">Login</button>
             </form>
-            <div class="divider" data-aos="fade-up" data-aos-delay="700">atau login dengan</div>
-            <div class="social-login mb-2" data-aos="fade-up" data-aos-delay="800">
-                <button class="social-btn" title="Login with Google">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google">
-                </button>
-                <button class="social-btn" title="Login with Facebook">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg" alt="Facebook">
-                </button>
-            </div>
-            <a href="#" class="register-link" data-aos="fade-up" data-aos-delay="900">Belum punya akun? <b>Daftar di sini</b></a>
+            <a href="pendaftaran.php" class="register-link">Belum punya akun? <b>Daftar di sini</b></a>
         </div>
     </div>
 

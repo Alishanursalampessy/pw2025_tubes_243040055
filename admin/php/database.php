@@ -11,10 +11,40 @@ function select($query)
     }
     return $rows;
 }
+
+// tambah pendaftaran
+function create_pendaftaran($data)
+{
+    global $db;
+    $username = $data['username'];
+    $email = $data['email'];
+    $password = $data['password'];
+    $query = "INSERT INTO data_pendaftaran VALUES (null, '$username', '$email', '$password')";
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
+}
+
+// tambah pesanan
+function create_pesanan($data)
+{
+    global $db;
+    $nama_pelanggan = $data['nama_pelanggan'];
+    $menu = $data['menu'];
+    $jumlah = $data['jumlah'];
+    $harga = $data['harga'];
+    $query = "INSERT INTO data_pesanan VALUES (null, '$nama_pelanggan', '$menu', '$jumlah', '$harga')";
+    mysqli_query($db, $query);
+
+    return mysqli_affected_rows($db);
+}
+
+
+// tambah menu
 function create_menu($data)
 {
     global $db;
-    $nama_makanan = $data['nama_makanan'];
+    $nama_makanan = $data['nama'];
     $deskripsi = $data['deskripsi'];
     $harga = $data['harga'];
     $kategori = $data['kategori'];

@@ -3,12 +3,13 @@ include '../database.php';
 
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-$menu = select("SELECT * FROM data_menu2 WHERE id = $id");
+$pendaftaran = select("SELECT * FROM data_menu2 WHERE id = $id");
 
-if (!$menu || count($menu) === 0) {
+if (!$pendaftaran || count($pendaftaran) === 0) {
     echo "<script>alert('Data menu tidak ditemukan!');location.href = '../DataMenu.php';</script>";
     exit;
 }
+
 $menu = $menu[0];
 
 if (isset($_POST['ubah'])) {
@@ -34,16 +35,7 @@ if (isset($_POST['ubah'])) {
 </head>
 
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="nav-title">Admin Panel</div>
-            <div class="nav-links">
-                <a href="DataPendaftaran.php">Data Pendaftaran</a>
-                <a class="active" href="DataMenu.php">Data Menu</a>
-                <a href="DataPesanan.php">Data Pesanan</a>
-            </div>
-        </div>
-    </nav>
+
     <div class="container">
         <h3>Ubah Menu</h3>
         <form method="post" autocomplete="off">

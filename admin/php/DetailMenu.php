@@ -13,6 +13,7 @@ $menu = $menu[0];
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Detail Menu</title>
@@ -24,83 +25,120 @@ $menu = $menu[0];
     <style>
         body {
             font-family: 'Inter', Arial, sans-serif;
-            background: linear-gradient(120deg, #e0f7fa 60%, #fffde4 100%);
+            background: linear-gradient(120deg, #a47149 60%, #f3e9e1 100%);
             min-height: 100vh;
         }
+
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 2rem;
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            background: #6d4c2c;
+            box-shadow: 0 2px 8px rgba(80, 50, 20, 0.08);
         }
+
         .nav-title {
             font-weight: 700;
             font-size: 1.5rem;
-            color: #198754;
+            color: #fff3e0;
             letter-spacing: 1px;
+            text-shadow: 1px 1px 2px #5d3a1a33;
         }
+
         .nav-links a {
             margin-left: 1.5rem;
-            color: #333;
+            color: #f3e9e1;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s;
         }
-        .nav-links a.active, .nav-links a:hover {
-            color: #198754;
+
+        .nav-links a.active,
+        .nav-links a:hover {
+            color: #ffb300;
             text-decoration: underline;
         }
+
         .card-custom {
             animation: fadeInUp 0.7s;
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 248, 240, 0.98);
             border-radius: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.09);
+            box-shadow: 0 8px 32px rgba(120, 72, 36, 0.13);
+            border: 2px solid #a47149;
         }
+
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px);}
-            to { opacity: 1; transform: translateY(0);}
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         .img-preview {
             max-height: 220px;
             object-fit: cover;
             border-radius: 1rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 16px rgba(120, 72, 36, 0.13);
+            border: 2px solid #a47149;
+            background: #f3e9e1;
             transition: transform 0.3s;
         }
+
         .img-preview:hover {
             transform: scale(1.08);
         }
+
         .badge-kategori {
-            background: linear-gradient(90deg, #198754 60%, #43e97b 100%);
+            background: linear-gradient(90deg, #a47149 60%, #ffb300 100%);
             color: #fff;
             font-size: 1rem;
             font-weight: 600;
             border-radius: 1rem;
+            box-shadow: 0 2px 8px #a4714922;
         }
+
         .btn-custom {
             font-weight: 600;
             border-radius: 0.75rem;
+            background: #a47149;
+            color: #fff3e0;
+            border: none;
             transition: background 0.2s, color 0.2s;
         }
+
         .btn-custom:hover {
-            background: #198754;
+            background: #ffb300;
             color: #fff;
+        }
+
+        .table th {
+            color: #a47149;
+        }
+
+        .badge.bg-success {
+            background: #a47149 !important;
+            color: #fff3e0 !important;
+        }
+
+        .badge.bg-danger {
+            background: #6d4c2c !important;
+            color: #fff3e0 !important;
+        }
+
+        /* Tambahan untuk mengubah warna tulisan utama menjadi coklat */
+        .text-success {
+            color: #a47149 !important;
         }
     </style>
 </head>
+
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="nav-title"><i class="bi bi-speedometer2"></i> Admin Panel</div>
-            <div class="nav-links">
-                <a href="DataPendaftaran.php"><i class="bi bi-person-lines-fill"></i> Data Pendaftaran</a>
-                <a class="active" href="DataMenu.php"><i class="bi bi-list-ul"></i> Data Menu</a>
-                <a href="DataPesanan.php"><i class="bi bi-basket"></i> Data Pesanan</a>
-            </div>
-        </div>
-    </nav>
 
     <div class="container d-flex align-items-center justify-content-center" style="min-height:100vh;">
         <div class="card card-custom p-4 shadow-lg border-0" style="max-width: 750px; width:100%;">
@@ -144,24 +182,23 @@ $menu = $menu[0];
                             </td>
                         </tr>
                         <?php if (!empty($menu['deskripsi'])): ?>
-                        <tr>
-                            <th class="text-secondary align-top"><i class="bi bi-card-text"></i> Deskripsi</th>
-                            <td><?= nl2br(htmlspecialchars($menu['deskripsi'])) ?></td>
-                        </tr>
+                            <tr>
+                                <th class="text-secondary align-top"><i class="bi bi-card-text"></i> Deskripsi</th>
+                                <td><?= nl2br(htmlspecialchars($menu['deskripsi'])) ?></td>
+                            </tr>
                         <?php endif; ?>
                     </table>
                 </div>
             </div>
-            <div class="d-flex justify-content-between gap-2 mt-3">
-                <a href="../DataMenu.php" class="btn btn-outline-success btn-custom w-50">
+            <div class="d-flex justify-content-center mt-3">
+                <a href="DataMenu.php" class="btn btn-outline-success btn-custom w-50">
                     <i class="bi bi-arrow-left"></i> Kembali
-                </a>
-                <a href="UbahMenu.php?id=<?= $menu['id'] ?>" class="btn btn-success btn-custom w-50">
-                    <i class="bi bi-pencil-square"></i> Ubah Data
                 </a>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
